@@ -211,14 +211,12 @@ fun SearchBar(searchQuery: String, onSearchQueryChange: (String) -> Unit) {
             )
         )
 
-        FilledIconButton(
+        Button(
             onClick = { },
             modifier = Modifier
                 .padding(start = 10.dp)
-                .height(48.dp),
-            colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = Color(0xFF5669FF)
-            )
+                .width(40.dp)
+                .height(40.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.filter),
@@ -239,7 +237,7 @@ fun BookingForm(
     childCount: Int = 0,
     onAdultCountChange: (Int) -> Unit = {},
     onChildCountChange: (Int) -> Unit = {},
-    navController: NavController  // Accept NavController here
+    navController: NavController
 ) {
     var selectedTab by remember { mutableStateOf(0) }
     val tabs = listOf("One Way", "Round Trip", "Multicity")
@@ -280,8 +278,7 @@ fun BookingForm(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFF4F4F4), RoundedCornerShape(8.dp))
-                    .padding(4.dp)
+                    .background(Color(0xFFF4F4F4), RoundedCornerShape(30.dp))
             ) {
                 tabs.forEachIndexed { index, title ->
                     Text(
@@ -290,7 +287,7 @@ fun BookingForm(
                             .weight(1f)
                             .background(
                                 if (selectedTab == index) Color(0xFF5669FF) else Color.Transparent,
-                                RoundedCornerShape(6.dp)
+                                RoundedCornerShape(30.dp)
                             )
                             .padding(vertical = 8.dp)
                             .clickable { selectedTab = index },
@@ -586,8 +583,8 @@ fun NavigationCard(item: NavigationItem) {
 
         Text(
             text = item.title,
-            style = MaterialTheme.typography.bodyMedium,
-            color = if (item.title == "Flights") Color(0xFF5669FF) else Color(0xFF898989),
+            style = MaterialTheme.typography.bodyLarge,
+            color = if (item.title == "Flights") Color(0xFF000000) else Color(0xFF898989),
             modifier = Modifier.padding(top = 8.dp)
         )
     }

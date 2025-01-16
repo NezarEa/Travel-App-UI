@@ -49,7 +49,6 @@ fun FlightDetailsScaffold() {
                 Column(
                     modifier = Modifier
                         .padding(innerPadding)
-                        .padding(15.dp)
                         .background(color = Color(0xFFF8F8F8))
                 ) {
 
