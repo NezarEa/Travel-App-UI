@@ -42,6 +42,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.cmc.travelapp.ui.theme.TravelAppTheme
 import java.util.Calendar
 
@@ -58,15 +62,26 @@ class MainActivity : ComponentActivity() {
                         topBar = { TravelAppTopBar() },
                         bottomBar = { TravelAppBottomBar() }
                     ) { innerPadding ->
-                        FlightBookingScreen(
-                            modifier = Modifier.padding(innerPadding)
-                        )
+                        val navController = rememberNavController()
+                        NavHost(navController = navController, startDestination = "flight_booking") {
+                            composable("flight_booking") {
+                                FlightBookingScreen(
+                                    modifier = Modifier.padding(innerPadding),
+                                    navController = navController
+                                )
+                            }
+                            composable("flight_listing") {
+                                FlightListing()
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,7 +112,10 @@ fun TravelAppTopBar() {
 }
 
 @Composable
-fun FlightBookingScreen(modifier: Modifier = Modifier) {
+fun FlightBookingScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf("") }
     var adultCount by remember { mutableStateOf(1) }
@@ -130,7 +148,8 @@ fun FlightBookingScreen(modifier: Modifier = Modifier) {
                 adultCount = adultCount,
                 childCount = childCount,
                 onAdultCountChange = { adultCount = it },
-                onChildCountChange = { childCount = it }
+                onChildCountChange = { childCount = it },
+                navController = navController
             )
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -155,10 +174,10 @@ fun FlightBookingScreen(modifier: Modifier = Modifier) {
             SectionHeader(title = "My Achievements", onSeeAll = {})
 
             BtnJournies()
-
         }
     }
 }
+
 
 
 
@@ -219,7 +238,8 @@ fun BookingForm(
     adultCount: Int = 0,
     childCount: Int = 0,
     onAdultCountChange: (Int) -> Unit = {},
-    onChildCountChange: (Int) -> Unit = {}
+    onChildCountChange: (Int) -> Unit = {},
+    navController: NavController  // Accept NavController here
 ) {
     var selectedTab by remember { mutableStateOf(0) }
     val tabs = listOf("One Way", "Round Trip", "Multicity")
@@ -404,7 +424,7 @@ fun BookingForm(
             }
 
             OutlinedButton(
-                onClick = { },
+                onClick = { navController.navigate("flight_listing") },
                 modifier = Modifier
                     .padding(8.dp)
                     .height(50.dp)
@@ -424,6 +444,7 @@ fun BookingForm(
         }
     }
 }
+
 
 @Composable
 fun openDatePickerDialog(context: Context, onDateSelected: (String) -> Unit) {
@@ -885,11 +906,11 @@ fun BtnJournies() {
                     shape = RoundedCornerShape(12.dp)
                 )
                 .padding(16.dp),
-            contentAlignment = Alignment.Center // Ensures the Row is centered
+            contentAlignment = Alignment.Center
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.wrapContentWidth() // Ensures Row only takes up space it needs
+                modifier = Modifier.wrapContentWidth()
             ) {
                 Image(
                     painter = painterResource(R.drawable.cartgift),
@@ -966,6 +987,11 @@ fun TravelAppBottomBar() {
 @Composable
 fun FlightBookingScreenPreview() {
     TravelAppTheme {
-        FlightBookingScreen()
+        val navController = rememberNavController()
+        FlightBookingScreen(
+            modifier = Modifier.fillMaxSize(),
+            navController = navController
+        )
     }
 }
+
