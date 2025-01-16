@@ -61,7 +61,6 @@ fun FlightDetailsScaffold() {
                 }
             }
         )
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
